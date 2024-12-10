@@ -2,7 +2,7 @@ import './App.module.css'
 import Field from "./Components/Field.tsx";
 import styles from './App.module.css'
 import React from "react";
-import {GameProvider} from "./Components/GameLogicProvider.tsx";
+import {GameProvider} from "./Components/GameProcessProvider.tsx";
 
 const App: React.FC = () => {
     const boardSize = 7;

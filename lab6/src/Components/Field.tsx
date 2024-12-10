@@ -1,6 +1,7 @@
 import styles from './field.module.css'
-import {useGameContext} from "./GameLogicProvider.tsx";
+import {useGameContext} from "./GameProcessProvider.tsx";
 import {useEffect, useRef, useState} from "react";
+import { GameLogic } from '../GameLogic/GameLogic.ts'
 
 interface PressedDots {
     firstDot: {
@@ -15,10 +16,11 @@ interface PressedDots {
 
 const Field = () => {
 
-    const {board, relations, makeRelation, isValid, size} = useGameContext();
+    const {board, relations, makeRelation, size} = useGameContext();
     const [pressed, setPressed] = useState<PressedDots | null>();
     const ref = useRef<HTMLDivElement>(null);
     const [currentPlayer, setCurrentPlayer] = useState("red");
+    const gameLogic = new GameLogic(board, size);
 
 
     useEffect(() => {
@@ -27,7 +29,7 @@ const Field = () => {
             const values = {firstDot: {row: pressed.firstDot.row, col: pressed.firstDot.col},
                 secondDot: {row: pressed.secondDot.row, col: pressed.secondDot.col}}
 
-            if(isValid(values, currentPlayer)) {
+            if(gameLogic.isValid(values, currentPlayer)) {
                 makeRelation(values);
                 setCurrentPlayer(prev => prev === "red" ? "blue" : "red");
             }

@@ -17,12 +17,13 @@ export class GameLogic {
         this.size = size;
     }
 
-    public isValidMove(move: Move): boolean {
+    public isValid(move: Move, cp: string): boolean {
         const { firstDot, secondDot } = move;
 
         if (!this.isLimit(firstDot, secondDot)) return false;
         if (this.isExistLine(firstDot, secondDot)) return false;
         if (!this.isDistanceGood(firstDot, secondDot)) return false;
+        if (!this.isCurrentPlayer(firstDot, secondDot, cp)) return false;
 
         return true;
     }
@@ -51,5 +52,17 @@ export class GameLogic {
         return true;
     }
 
+    private isCurrentPlayer = (firstDot: Dot, secondDot: Dot, currentPlayer: string):boolean => {
+        if(currentPlayer === "red") {
+            if(firstDot.col !== secondDot.col) {
+                return false;
+            }
+        } else {
+            if(firstDot.row !== secondDot.row) {
+                return false;
+            }
+        }
 
+        return true;
+    }
 }
