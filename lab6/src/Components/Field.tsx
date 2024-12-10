@@ -50,12 +50,12 @@ const Field = ({ cp, difficulty }: { cp?: string; difficulty?: number }) => {
 
                 makeRelation(opponentMove);
 
-                if (gameLogic.IsGameOver(currentPlayer === "red" ? "blue": "red")) {
-                    setIsGameOver(currentPlayer);
-                }
-
                 if (gameLogic.IsGameOver(currentPlayer)) {
                     setIsGameOver(currentPlayer === "red" ? "blue": "red");
+                }
+
+                if (gameLogic.IsGameOver(currentPlayer === "red" ? "blue": "red")) {
+                    setIsGameOver(currentPlayer);
                 }
             }
 
@@ -132,7 +132,6 @@ const Field = ({ cp, difficulty }: { cp?: string; difficulty?: number }) => {
                 )}
 
                 {relations.map(({firstDot, secondDot}, index) => {
-                    // @ts-ignore
                     return (
                         <div
                             key={index}
