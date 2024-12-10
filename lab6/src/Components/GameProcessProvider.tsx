@@ -26,27 +26,32 @@ interface MovePropType {
     }
 }
 
-type Relations = Record<string, { row: number; col: number }>;
+type Relations = Array<{
+    firstDot: { row: number; col: number };
+    secondDot: { row: number; col: number };
+}>;
 
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider = ({children, size}: GameProviderProps) => {
     const [board, setBoard] = useState<Board>(Array(size).fill(false).map(() => Array(size).fill(false)));
-    const [relations, setRelations] = useState<Relations>({});
+    const [relations, setRelations] = useState<Relations>([]);
 
 
-    const makeRelation = ({firstDot, secondDot}: MovePropType): void => {
+    const makeRelation = ({ firstDot, secondDot }: MovePropType): void => {
         const newBoard = [...board];
-        const newRelations = {...relations};
 
-        newRelations[`${firstDot.row},${firstDot.col}`] = {row: secondDot.row, col: secondDot.col};
+        setRelations((prevRelations) => [
+            ...prevRelations,
+            { firstDot, secondDot },
+        ]);
+
         newBoard[firstDot.row][firstDot.col] = true;
         newBoard[secondDot.row][secondDot.col] = true;
 
-        setRelations(newRelations);
         setBoard(newBoard);
-    }
+    };
 
     return (
         <GameContext.Provider value={{ board, relations, makeRelation, size }}>

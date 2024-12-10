@@ -9,7 +9,7 @@ interface Dot {
 }
 
 export class GameLogic {
-    private board: boolean[][];
+    public board: boolean[][];
     private size: number;
 
     constructor(board: boolean[][], size: number) {
@@ -18,7 +18,7 @@ export class GameLogic {
     }
 
     public isValid(move: Move, cp: string): boolean {
-        const { firstDot, secondDot } = move;
+        const {firstDot, secondDot} = move;
 
         if (!this.isLimit(firstDot, secondDot)) return false;
         if (this.isExistLine(firstDot, secondDot)) return false;
@@ -52,17 +52,58 @@ export class GameLogic {
         return true;
     }
 
-    private isCurrentPlayer = (firstDot: Dot, secondDot: Dot, currentPlayer: string):boolean => {
-        if(currentPlayer === "red") {
-            if(firstDot.col !== secondDot.col) {
+    private isCurrentPlayer = (firstDot: Dot, secondDot: Dot, currentPlayer: string): boolean => {
+        if (currentPlayer === "red") {
+            if (firstDot.col !== secondDot.col) {
                 return false;
             }
         } else {
-            if(firstDot.row !== secondDot.row) {
+            if (firstDot.row !== secondDot.row) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public IsGameOver(cp: string): boolean {
+        const validMoves = [];
+        for (let i = 0; i < this.board.length; i++) {
+            for (let j = 0; j < this.board[i].length; j++) {
+
+                if (!this.board[i][j]) {
+                    const neighbours = this.GetNeighbours({row: i, col: j}, cp);
+                    for (let k = 0; k < neighbours.length; k++) {
+                        const line = {
+                            firstDot: {row: i, col: j},
+                            secondDot: {row: neighbours[k].row, col: neighbours[k].col}
+                        };
+
+                        if (this.isValid(line, cp === "red" ? "blue" : "red")) {
+                            validMoves.push(line);
+                        }
+                    }
+                }
+
+            }
+        }
+        return validMoves.length === 0;
+    }
+
+    public GetNeighbours(dot: Dot, player: string): Dot[] {
+        let directions;
+        if (player === "red") {
+            directions = [[0, -1], [0, 1]];
+        } else {
+            directions = [[1, 0], [-1, 0]];
+        }
+
+        const neighbours: Dot[] = [];
+
+        for (let i = 0; i < directions.length; i++) {
+            neighbours.push({row: dot.row + directions[i][0], col: dot.col + directions[i][1]});
+        }
+
+        return neighbours;
     }
 }
