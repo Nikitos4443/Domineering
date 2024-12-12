@@ -1,6 +1,6 @@
 import styles from './field.module.css'
 import {useGameContext} from "./GameProcessProvider.tsx";
-import {useEffect, useRef, useState} from "react";
+import {CSSProperties, useEffect, useRef, useState} from "react";
 import {GameLogic} from '../GameLogic/GameLogic.ts'
 import Opponent from "../Opponent/Opponent.ts";
 
@@ -108,7 +108,7 @@ const Field = ({ cp, difficulty }: { cp?: string; difficulty?: number }) => {
             backgroundColor: from.row === to.row ? 'red' : 'blue',
             transform: `rotate(${angle}deg)`,
             transformOrigin: 'left center',
-        };
+        } as CSSProperties;
     };
 
     return (
