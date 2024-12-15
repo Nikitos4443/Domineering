@@ -25,7 +25,7 @@ class Opponent {
 
     constructor(depth: number | undefined, board: boolean[][], cp: string) {
 
-        this.depth = depth ? depth : -1;
+        this.depth = depth === undefined ? -1 : depth;
         this.board = board;
         this.gameLogic = new GameLogic(board, board.length);
         this.cp = cp;
